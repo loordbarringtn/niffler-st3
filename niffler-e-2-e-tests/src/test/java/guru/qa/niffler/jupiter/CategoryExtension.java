@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.*;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-public class CategoryExtension implements BeforeEachCallback, ParameterResolver {
+public class CategoryExtension implements BeforeEachCallback {
     public static ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(CategoryExtension.class);
 
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
@@ -29,15 +29,5 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver 
             CategoryJson createdCategory = categoriesService.addCategory(categoryJson).execute().body();
             context.getStore(NAMESPACE).put("category", createdCategory);
         }
-    }
-
-    @Override
-    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.getParameter().getType().isAssignableFrom(CategoryJson.class);
-    }
-
-    @Override
-    public CategoryJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return extensionContext.getStore(NAMESPACE).get("category", CategoryJson.class);
     }
 }
